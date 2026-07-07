@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Портал ВЕКА · Штурман закупок</title>
+<style>
+:root{--bg:#151013;--panel:#241a1f;--rose:#c98ba0;--rose2:#8f5568;--brass:#c9a24a;--cream:#efe7e2;--mut:#a99aa0;--wine:#4a2233;--wine2:#3a1a28}
+*{box-sizing:border-box}
+body{margin:0;-webkit-user-select:none;user-select:none;background:radial-gradient(circle at 50% -5%,#2a1d24,#0e0a0c 70%);color:var(--cream);font-family:Georgia,'Times New Roman',serif;min-height:100vh}
+.topbar{background:linear-gradient(180deg,#1c1418,#160f13);border-bottom:1px solid rgba(201,162,74,.25);padding:16px 28px;display:flex;align-items:center;gap:14px}
+.logo{width:34px;height:34px;border:2px solid var(--brass);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--brass);font-weight:700}
+.brand h1{margin:0;font-size:21px;letter-spacing:.5px}
+.brand .sub{font-size:11px;letter-spacing:3px;color:var(--mut);text-transform:uppercase;font-family:Arial,sans-serif}
+.stage{max-width:920px;margin:34px auto;padding:0 22px;text-align:center}
+.calltop{font-size:14px;color:var(--rose);font-family:Arial,sans-serif;letter-spacing:1px;margin-bottom:6px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+.scene{perspective:900px;width:230px;height:230px;margin:14px auto 10px;cursor:pointer;position:relative}
+.scene::after{content:"";position:absolute;inset:-14px;border-radius:24px;box-shadow:0 0 0 0 rgba(201,139,160,.5);animation:halo 2.2s infinite}
+@keyframes halo{0%{box-shadow:0 0 0 0 rgba(201,139,160,.45)}70%{box-shadow:0 0 0 22px rgba(201,139,160,0)}100%{box-shadow:0 0 0 0 rgba(201,139,160,0)}}
+.scene.done::after{animation:none}
+.cubeWrap{width:230px;height:230px;position:relative;transform-style:preserve-3d;animation:idle 6s ease-in-out infinite}
+@keyframes idle{0%,100%{transform:rotateY(0deg)}50%{transform:rotateY(-10deg)}}
+.cubeWrap.spinning{animation:none}
+.cube{width:230px;height:230px;position:relative;transform-style:preserve-3d;transform:rotateX(-22deg) rotateY(-28deg)}
+.cube.throwing{transition:transform 3.2s cubic-bezier(.18,.72,.14,1);filter:drop-shadow(0 0 30px rgba(201,139,160,.9))}
+.tap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;pointer-events:none;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#fff;background:rgba(143,85,104,.85);padding:8px 14px;border-radius:30px;box-shadow:0 4px 14px rgba(0,0,0,.5);white-space:nowrap;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-62%)}}
+.f{position:absolute;width:230px;height:230px;border:1px solid rgba(201,162,74,.55);border-radius:6px;background:linear-gradient(150deg,var(--wine),var(--wine2));display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 46px rgba(0,0,0,.6),inset 0 0 0 6px rgba(201,162,74,.12);backface-visibility:hidden}
+.f .gem{width:26px;height:26px;background:var(--rose);border-radius:5px;transform:rotate(45deg);box-shadow:0 0 18px var(--rose);margin-bottom:14px}
+.f .lbl{font-style:italic;font-size:19px;color:var(--cream);text-shadow:0 2px 6px #000}
+.f1{transform:rotateY(0deg) translateZ(115px)}.f2{transform:rotateY(90deg) translateZ(115px)}.f3{transform:rotateY(180deg) translateZ(115px)}
+.f4{transform:rotateY(-90deg) translateZ(115px)}.f5{transform:rotateX(90deg) translateZ(115px)}.f6{transform:rotateX(-90deg) translateZ(115px)}
+.spinBtn{background:linear-gradient(180deg,var(--rose),var(--rose2));color:#241318;border:none;border-radius:40px;padding:16px 40px;font-size:18px;font-weight:700;font-family:Georgia,serif;cursor:pointer;box-shadow:0 8px 26px rgba(143,85,104,.5);transition:.2s;margin-top:8px}
+.spinBtn:hover:not(:disabled){transform:translateY(-2px) scale(1.03)}
+.spinBtn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
+.hint{color:var(--mut);font-size:13px;margin-top:14px;font-family:Arial,sans-serif}
+.locked{color:var(--brass);font-size:13px;margin-top:10px;font-family:Arial,sans-serif}
+.scene{cursor:pointer}
+.scene::after{pointer-events:none}
+.who{margin:40px auto 8px;max-width:340px;position:relative;z-index:30}
+.who input{-webkit-user-select:text;user-select:text;position:relative;z-index:30;background:#1c1418;border:1px solid rgba(201,162,74,.35);color:var(--cream);border-radius:30px;padding:9px 16px;font-size:13px;font-family:Arial,sans-serif;text-align:center;width:100%;outline:none}
+.who input:focus{border-color:var(--rose)}
+.oracle{max-width:640px;margin:32px auto 0;opacity:0;transform:translateY(16px);transition:.6s}
+.oracle.show{opacity:1;transform:none}
+.card{background:linear-gradient(160deg,#2c2027,#1c1418);border:1px solid rgba(201,162,74,.35);border-radius:20px;padding:30px 28px;box-shadow:0 20px 50px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(201,139,160,.18),transparent 70%)}
+.move{font-family:Arial,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--brass);margin-bottom:6px}
+.tone{font-family:Arial,sans-serif;font-size:11px;color:var(--rose);margin-bottom:12px}
+.reco{font-size:23px;line-height:1.4;color:var(--cream);margin-bottom:16px}
+.why{font-size:14px;color:var(--mut);font-family:Arial,sans-serif;line-height:1.6;border-left:3px solid var(--rose2);padding-left:14px;margin-bottom:16px}
+.metric{display:inline-block;background:rgba(201,162,74,.12);border:1px solid rgba(201,162,74,.4);color:var(--brass);font-family:Arial,sans-serif;font-size:12px;padding:6px 12px;border-radius:20px}
+.comeback{margin-top:20px;color:var(--mut);font-size:12px;font-family:Arial,sans-serif}
+.foot{text-align:center;color:var(--mut);font-size:11px;font-family:Arial,sans-serif;padding:40px 20px 30px;line-height:1.7}
+</style></head><body>
+<div class="topbar"><div class="logo">▲</div><div class="brand"><h1>Портал ВЕКА</h1><div class="sub">Штурман закупок · один ход в день</div></div></div>
+
+<div class="stage">
+<div class="calltop" id="call">↓ Нажми на кубик и получи ход дня ↓</div>
+<div class="scene" id="scene" onclick="spin()"><div class="tap" id="tap">Нажми меня</div><div class="cubeWrap" id="cubeWrap"><div class="cube" id="cube">
+<div class="f f1"><div class="gem"></div><div class="lbl">Ход конём</div></div>
+<div class="f f2"><div class="gem"></div><div class="lbl">Совет дня</div></div>
+<div class="f f3"><div class="gem"></div><div class="lbl">Рычаг</div></div>
+<div class="f f4"><div class="gem"></div><div class="lbl">Щит</div></div>
+<div class="f f5"><div class="gem"></div><div class="lbl">Зеркало</div></div>
+<div class="f f6"><div class="gem"></div><div class="lbl">Ва-банк</div></div>
+</div></div></div>
+
+<div class="who"><input id="name" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Как тебя зовут? (для одного хода в день)" oninput="saveName()"></div>
+<button class="spinBtn" id="spin" onclick="spin()">♟ Сделать ход дня</button>
+<div class="hint" id="hint">Один ход в сутки — стратегия любит фокус.</div>
+<div class="locked" id="locked" style="display:none"></div>
+<div style="margin-top:12px"><a href="#" id="reset" style="color:#a99aa0;font-size:11px;font-family:Arial,sans-serif;text-decoration:underline">Сбросить ход дня</a></div>
+
+<div class="oracle" id="oracle"><div class="card">
+<div class="move" id="mv"></div>
+<div class="tone" id="tn"></div>
+<div class="reco" id="rc"></div>
+<div class="why" id="wh"></div>
+<div class="metric" id="mt"></div>
+<div class="comeback" id="cb"></div>
+</div></div>
+</div>
+
+<div class="foot">Портал ВЕКА · Штурман закупок · один ход в день на человека<br>Советы опираются на считаемые вещи (should-cost, TCO, ROI, OTIF), а не на звёзды. Юмор — бесплатно, база цифр — у финдиректора.</div>
+
+<script>
+var MOVES={
+"Ход конём":{pool:[
+ {t:"серьёзно" r:"Смени предмет торга: спорь не о цене за штуку, а о совокупной стоимости владения (TCO)." w:"Поставщик держит цену, но проигрывает в логистике, браке и отсрочке. Разложи TCO, «дорогой» станет дешёвым." m:"Инструмент: калькулятор TCO"},
+ {t:"серьёзно" r:"Раздели заказ 70/30 между двумя поставщиками. Второй нужен как рычаг, а не как объём." w:"Монопоставщик диктует. Даже маленькая доля у конкурента возвращает переговорную силу." m:"Эффект: минус зависимость"},
+ {t:"с юмором" r:"Позвони поставщику и «случайно» упомяни, что тебе написал его конкурент. Дальше молчи." w:"Тишина в переговорах, недооценённое оружие. Пауза давит сильнее любого аргумента." m:"Тактика: стратегическая пауза 🤫"},
+ {t:"с юмором" r:"Приди на переговоры с распечатанным should-cost и просто положи его на стол. Ничего не говори минуту." w:"Бумага с расчётом пугает сильнее криков. Пусть цифры поработают вместо тебя." m:"Reality check на бумаге 📄"}]},
+"Совет дня":{pool:[
+ {t:"серьёзно" r:"Собери should-cost: сырьё + передел + логистика + маржа. Приходи с этой таблицей." w:"«Красивый прайс» рассыпается, когда видно, из чего он состоит. Расчёт бьёт эмоции." m:"Should-cost на 1 листе"},
+ {t:"серьёзно" r:"Проверь оборачиваемость запасов. Ниже 6 оборотов/год, деньги заморожены на складе." w:"Скидка за объём часто превращается в склад «на всякий случай». Оборот важнее разовой скидки." m:"KPI: оборачиваемость ≥6"},
+ {t:"с юмором" r:"Прежде чем просить скидку, выпей кофе. Голодный закупщик соглашается на первое предложение." w:"Переговоры на низком сахаре, путь к плохой сделке. Сначала обед, потом торг." m:"Лайфхак: не торгуйся натощак ☕"},
+ {t:"с юмором" r:"Сегодня скажи поставщику «мне нужно подумать», даже если всё решено. Скидка часто прилетает на паузе." w:"Спешащий покупатель платит премию за спешку. Неспешность, тоже переговорная позиция." m:"Волшебная фраза дня 🪄"}]},
+"Рычаг":{pool:[
+ {t:"серьёзно" r:"Посчитай ROI функции: годовая экономия ÷ затраты на закупки. Ориентир Gartner ~10:1." w:"Один коэффициент отвечает на вопрос собственника «окупается ли отдел»." m:"ROI = экономия / затраты"},
+ {t:"серьёзно" r:"Переведи прирост EBITDA в стоимость бизнеса: ΔEV = ΔEBITDA × мультипликатор." w:"Экономия закупок, не разовая цифра, а капитализируемая стоимость. Говори языком владельца." m:"ΔEV = ΔEBITDA × M"},
+ {t:"серьёзно" r:"Найди топ-3 позиции по обороту денег. 80% рычага там, остальное сегодня не трогай." w:"Парето: распыление на мелочь, иллюзия работы. Рычаг там, где крупные деньги." m:"Фокус: топ-3 по затратам"},
+ {t:"с юмором" r:"Составь список позиций, где ты переплачиваешь по привычке «мы всегда у них берём»." w:"«Всегда брали», самая дорогая фраза в закупках. Привычка стоит денег." m:"Аудит священных коров 🐄"}]},
+"Щит":{pool:[
+ {t:"серьёзно" r:"Посчитай подушку ликвидности: ликвидные активы ÷ среднедневной OPEX = дней без выручки." w:"Она должна покрывать срок замены критичного поставщика. Иначе санкции = простой." m:"Норма: ≥ срока замены"},
+ {t:"серьёзно" r:"По критичным позициям держи страховой запас = срок поставки × коридор риска." w:"«40 ±5, при санкциях ±15», честный коридор. Запас гасит верхнюю границу." m:"Запас = срок × риск"},
+ {t:"серьёзно" r:"Аттестуй второй источник заранее, до того, как первый уйдёт, а не после." w:"Аттестованный аналог обнуляет дни простоя. Искать замену в кризис, поздно." m:"Резерв: 2-й источник готов"},
+ {t:"с юмором" r:"Составь список поставщиков, чей уход тебя разбудит в 3 ночи. Вот с ними и работай над планом Б." w:"Если поставщик снится в кошмарах, у тебя нет резерва. Сон закупщика, индикатор риска." m:"Тест бессонницы 😴"}]},
+"Зеркало":{pool:[
+ {t:"серьёзно" r:"Прогони прогноз через WAPE по портфелю: 1 − Σ|прогноз−факт|/Σфакт. Ниже 85%, план на песке." w:"Точность по одной позиции обманывает. Только портфель показывает правду." m:"KPI: точность ≥85%"},
+ {t:"серьёзно" r:"Собери три отдела на 90 минут: продажи·производство·закупки, один файл, только цифры." w:"Симфония S&OP: продажи видят честный коридор сроков и перестают обещать невыполнимое." m:"S&OP: один язык цифр"},
+ {t:"серьёзно" r:"Проверь OTIF: поставки в срок И в полном объёме ÷ всего. Частичная = ноль." w:"Мягкий учёт прячет срывы. Бинарный OTIF показывает реальную надёжность." m:"KPI: OTIF ≥90%"},
+ {t:"с юмором" r:"Открой прошлогодний прогноз и сравни с фактом. Молча. Сделай выводы. Никому не показывай." w:"Честная встреча со своими прошлыми прогнозами лечит оптимизм лучше любого тренинга." m:"Терапия прошлым прогнозом 🪞"}]},
+"Ва-банк":{pool:[
+ {t:"серьёзно" r:"Смоделируй шок цен: объём × цена × рост%. Удар >20% EBITDA, иди к директору сейчас." w:"Кризис не спрашивает разрешения. Посчитай удар заранее, решение будет холодным." m:"Тревога: >20% EBITDA"},
+ {t:"серьёзно" r:"Пересмотри логистику под непредсказуемые сроки, не оптимизируй под идеал." w:"В турбулентности устойчивость важнее эффективности. Запасной маршрут дороже, но живой." m:"Устойчивость > эффективности"},
+ {t:"серьёзно" r:"Локализуй критичную позицию, даже если дороже на 10, 15%. Это цена страховки от санкций." w:"Санкционная волатильность, тот самый коридор «±15». Локальный поставщик его обнуляет." m:"Локализация как хедж"},
+ {t:"с юмором" r:"Сегодня разреши себе одну дерзкую идею: позвони поставщику, с которым все боятся связываться." w:"Иногда лучшая цена у того, кому никто не звонит. Смелость закупщика = скидка." m:"День дерзкого звонка 📞"}]}
+};
+var keys=Object.keys(MOVES);
+var faceRot={0:[-20,-20],1:[-20,-110],2:[-20,-200],3:[-20,-290],4:[70,-20],5:[-110,-20]};
+var cube=document.getElementById('cube'),spinning=false,turns=0;
+var LKEY='veka_oracle_lastspin';
+
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function saveName(){localStorage.setItem('veka_oracle_name',document.getElementById('name').value.trim())}
+function getRecord(){try{return JSON.parse(localStorage.getItem(LKEY))||{}}catch(e){return{}}}
+function checkLock(){
+ var name=(document.getElementById('name').value||'').trim().toLowerCase();
+ if(!name)return{locked:false};
+ var rec=getRecord();
+ if(rec.date===todayStr()&&rec.name===name)return{locked:true,rec:rec};
+ return{locked:false};
+}
+function refreshLock(){
+ var st=checkLock();var btn=document.getElementById('spin');var lk=document.getElementById('locked');
+ if(st.locked){btn.disabled=true;lk.style.display='block';
+  lk.innerHTML='🔒 «'+st.rec.displayName+'», твой ход на сегодня уже сделан:<br><b>♞ '+st.rec.move+'</b> — возвращайся завтра.';
+  document.getElementById('call').textContent='Ход на сегодня уже сделан';
+ }else{btn.disabled=false;lk.style.display='none';}
+}
+
+function spin(){
+ if(spinning)return;
+ var nameEl=document.getElementById('name');var raw=(nameEl.value||'').trim();
+ if(!raw){nameEl.focus();nameEl.style.borderColor='#d24b4b';document.getElementById('hint').textContent='Сначала впиши имя — один ход в день закреплён за человеком.';return}
+ nameEl.style.borderColor='';
+ var st=checkLock();if(st.locked){refreshLock();return}
+ spinning=true;document.getElementById('spin').disabled=true;
+ document.getElementById('scene').classList.add('done');document.getElementById('tap').style.display='none';
+ document.getElementById('call').style.display='none';
+ document.getElementById('cubeWrap').classList.add('spinning');cube.classList.add('throwing');
+ document.getElementById('oracle').classList.remove('show');
+ var ki=Math.floor(Math.random()*keys.length),k=keys[ki],m=MOVES[k];var fr=faceRot[ki];
+ turns+=1;var spins=3;
+ var targetX=fr[0]-360*(turns+spins),targetY=fr[1]-360*(turns+spins);
+ cube.style.transition='transform .5s cubic-bezier(.35,0,.9,.4)';
+ cube.style.transform='rotateX('+(targetX-70)+'deg) rotateY('+(targetY-90)+'deg)';
+ setTimeout(function(){cube.style.transition='transform 2.4s cubic-bezier(.16,.84,.24,1)';cube.style.transform='rotateX('+(targetX+8)+'deg) rotateY('+(targetY+8)+'deg)';},500);
+ setTimeout(function(){cube.style.transition='transform .45s cubic-bezier(.34,1.56,.64,1)';cube.style.transform='rotateX('+targetX+'deg) rotateY('+targetY+'deg)';},2900);
+ setTimeout(function(){var p=m.pool[Math.floor(Math.random()*m.pool.length)];
+  document.getElementById('mv').textContent='♞ '+k;
+  document.getElementById('tn').textContent=(p.t==='с юмором'?'😏 с юмором':'🎯 серьёзно');
+  document.getElementById('rc').textContent=p.r;
+  document.getElementById('wh').textContent=p.w;
+  document.getElementById('mt').textContent=p.m;
+  document.getElementById('cb').textContent='Следующий ход — завтра. Стратегия ценит паузу.';
+  document.getElementById('oracle').classList.add('show');
+  document.getElementById('oracle').scrollIntoView({behavior:'smooth',block:'center'});
+  localStorage.setItem(LKEY,JSON.stringify({date:todayStr(),name:raw.toLowerCase(),displayName:raw,move:k}));
+  spinning=false;cube.classList.remove('throwing');document.getElementById('cubeWrap').classList.remove('spinning');refreshLock();
+ },3450);
+}
+(function init(){document.getElementById('name').value='';document.getElementById('name').addEventListener('input',refreshLock);document.getElementById('reset').addEventListener('click',function(e){e.preventDefault();localStorage.removeItem(LKEY);turns=0;var t=document.getElementById('tap');if(t)t.style.display='';document.getElementById('scene').classList.remove('done');document.getElementById('cube').classList.remove('throwing');document.getElementById('cubeWrap').classList.remove('spinning');document.getElementById('oracle').classList.remove('show');document.getElementById('call').style.display='';document.getElementById('name').value='';refreshLock();});refreshLock();})();
+</script></body></html>
